@@ -1,0 +1,35 @@
+@startuml
+title Agentic Ecosystem for Early Talent
+
+actor "Early Talent Employee" as ET
+rectangle "Task Board (Jira-like)" as Jira
+
+package "Employee Journey" {
+    agent "On/Offboarding Buddy" as Buddy
+    agent "Productivity Copilot" as Copilot
+    agent "Performance Coach" as Coach
+    agent "L&D Coach" as LDC
+    agent "Engagement Agent" as Engage
+}
+ET --> Jira : Adds / Updates task
+Jira --> Copilot : Task metadata\n(e.g. type, priority, deadline)
+Jira --> Engage : Detects inactivity / delays
+Jira --> Coach : Completion metrics
+
+ET --> Buddy : Sign docs\nCollect/Return items
+ET --> Copilot : Daily tasks\nProductivity tools
+ET --> Coach : Biweekly review\nFeedback loop
+ET --> LDC : Task-based learning\nLearning paths
+ET --> Engage : Monitors engagement\nSuggests projects
+
+Engage --> LDC : Suggests learning\nbased on engagement
+Copilot --> LDC : \n\n\n\nRecommends learning\nwhen task unfamiliar
+Coach --> Engage : Flags disengagement\nvia performance
+Buddy --> Engage : Signals onboarding\nsentiment
+Copilot --> Engage : Optional signal\n(task patterns)
+note right of Engage
+Not All Employees Use the Copilot
+Engagement ≠ Productivity
+end note
+
+@enduml
