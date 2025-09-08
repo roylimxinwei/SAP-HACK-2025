@@ -1,0 +1,31 @@
+[
+  {
+    "LSC_product": "SAP S/4HANA",
+    "LSC_product_category": "Enterprise Management",
+    "Learning_object_ID": "S4H01",
+    "Description": "<p>SAP Business Suite to SAP S/4HANA Delta Overview</p>",
+    "Title": "SAP Business Suite to SAP S/4HANA Delta Overview",
+    "Learning_type": "Practice System",
+    "Direct_link": {
+      "text": "https://learning.sap.com/practice-systems/sap-business-suite-to-sap-s-4hana-delta-overview",
+      "hyperlink": "https://learning.sap.com/practice-systems/sap-business-suite-to-sap-s-4hana-delta-overview",
+      "tooltip": "https://learning.sap.com/practice-systems/sap-business-suite-to-sap-s-4hana-delta-overview"
+    },
+    "LSC_product_subcategory": "Enterprise Resource Planning",
+    "Content_available_from": "2024-11-29"
+  },
+    {
+    "LSC_product": "SAP S/4HANA",
+    "LSC_product_category": "Enterprise Management",
+    "Learning_object_ID": "S4HR05",
+    "Title": "Business Processes in SAP HCM on S/4HANA",
+    "Learning_type": "Practice System",
+    "Direct_link": {
+      "text": "https://learning.sap.com/practice-systems/business-processes-in-sap-hcm-on-s-4hana",
+      "hyperlink": "https://learning.sap.com/practice-systems/business-processes-in-sap-hcm-on-s-4hana",
+      "tooltip": "https://learning.sap.com/practice-systems/business-processes-in-sap-hcm-on-s-4hana"
+    },
+    "LSC_product_subcategory": "Enterprise Resource Planning",
+    "Content_available_from": "2024-11-29"
+  }
+]
