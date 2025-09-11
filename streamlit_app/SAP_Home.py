@@ -94,7 +94,13 @@ if "user" in st.session_state:
 
         payload = {
             "sessionId": st.session_state.session_id,
-            "chatInput": prompt
+            "chatInput": prompt,
+            "user_details": st.session_state.get("user_details", {
+                "name": "",
+                "job_title": "",
+                "team": "",
+                "language": "English"
+            })
             }
 
         response = requests.post(prod_n8n_webhook_url, json=payload)
