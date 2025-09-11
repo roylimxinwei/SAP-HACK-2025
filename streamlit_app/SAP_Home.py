@@ -100,8 +100,19 @@ if "user" in st.session_state:
         response = requests.post(prod_n8n_webhook_url, json=payload)
 
         if response.status_code == 200:
-            st.success("Response from n8n:")
-            st.write(response.json())  # or .text depending on your n8n response
+            # st.success("Response from n8n:") # are we going to keep this?
+            # with st.chat_message("assistant"):
+            #     st.markdown(response.json()[0]["output"])
+            # # st.write(response.json())  # or .text depending on your n8n response
+            bot_reply = response.json()[0]["output"]  # adapt if n8n response shape differs
+
+            # Save assistant message to history
+            st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+
+            # Show assistant reply in a bubble
+            with st.chat_message("assistant"):
+                st.markdown(bot_reply)
+
         else:
             st.error(f"Error: {response.status_code} {response.text}")
 
