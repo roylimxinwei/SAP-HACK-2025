@@ -71,13 +71,31 @@ if "user" in st.session_state:
             st.success("Logged out successfully!")
             st.rerun()
 
+    # # Display existing messages
+    # for msg in st.session_state.messages:
+    #     with st.chat_message(msg["role"]):
+    #         st.markdown(msg["content"])
+    
+    # Retrieve previous messages from Supabase (using user_email for message history)
+    messages_data = supabase.table("chat_messages") \
+        .select("*") \
+        .eq("user_email", st.session_state["user"].email) \
+        .order("timestamp", desc=False) \
+        .execute()
+
+    if messages_data.data:
+        st.session_state.messages = [{"role": msg["role"], "content": msg["content"]} for msg in messages_data.data]
+    else:
+        st.session_state.messages = []
+
     # Display existing messages
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
+    # Create or ensure a unique session ID (this can be done with a UUID)
     if "session_id" not in st.session_state:
-        st.session_state.session_id = str(uuid.uuid4())
+        st.session_state.session_id = str(uuid.uuid4())  # Still can keep it for session-specific tracking if needed
 
     # Chat input box
     if prompt := st.chat_input("Say something..."):
@@ -102,8 +120,8 @@ if "user" in st.session_state:
                 "language": "English"
             })
             }
-
-        response = requests.post(prod_n8n_webhook_url, json=payload)
+        with st.spinner("S.A.P is thinking..."):
+            response = requests.post(prod_n8n_webhook_url, json=payload)
 
         if response.status_code == 200:
             # st.success("Response from n8n:") # are we going to keep this?
@@ -112,6 +130,22 @@ if "user" in st.session_state:
             # # st.write(response.json())  # or .text depending on your n8n response
             bot_reply = response.json()[0]["output"]  # adapt if n8n response shape differs
 
+            # Store user message in Supabase with user_email and session_id
+            supabase.table("chat_messages").insert({
+                "user_email": st.session_state["user"].email,  # Link message to the logged-in user
+                "session_id": st.session_state.session_id,
+                "role": "user",
+                "content": prompt
+            }).execute()
+
+            # Store assistant reply in Supabase
+            supabase.table("chat_messages").insert({
+                "user_email": st.session_state["user"].email,  # Link message to the logged-in user
+                "session_id": st.session_state.session_id,
+                "role": "assistant",
+                "content": bot_reply
+            }).execute()
+            
             # Save assistant message to history
             st.session_state.messages.append({"role": "assistant", "content": bot_reply})
 
