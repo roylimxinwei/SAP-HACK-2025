@@ -31,8 +31,7 @@ if "user_details" not in st.session_state:
     st.session_state.user_details = {
         "name": profile_data.get("name", ""),
         "job_title": profile_data.get("job_title", ""),
-        "team": profile_data.get("team", ""),
-        "language": profile_data.get("language", "English"),
+        "team": profile_data.get("team", "")
     }
 
 details = st.session_state.user_details
@@ -44,10 +43,6 @@ with st.form("user_details_form"):
     name = st.text_input("Preferred Name", value=details.get("name", ""))
     job_title = st.text_input("Job Title / Designation", value=details.get("job_title", ""))
     team = st.text_input("Team", value=details.get("team", ""))
-    
-    languages = ["English", "Chinese"]
-    index = languages.index(details.get("language")) if details.get("language") in languages else 0
-    language = st.selectbox("Preferred Language", options=languages, index=index)
 
     submitted = st.form_submit_button("Save Details")
 
@@ -57,8 +52,7 @@ with st.form("user_details_form"):
             "email": user_email,
             "name": name,
             "job_title": job_title,
-            "team": team,
-            "language": language
+            "team": team
         }).execute()
 
         # Update session_state cache
@@ -66,7 +60,6 @@ with st.form("user_details_form"):
             "name": name,
             "job_title": job_title,
             "team": team,
-            "language": language
         })
 
         st.success("✅ Profile updated successfully!")

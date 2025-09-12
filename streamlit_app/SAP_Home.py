@@ -116,8 +116,7 @@ if "user" in st.session_state:
             "user_details": st.session_state.get("user_details", {
                 "name": "",
                 "job_title": "",
-                "team": "",
-                "language": "English"
+                "team": ""
             })
             }
 
