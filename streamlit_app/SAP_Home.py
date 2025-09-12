@@ -120,6 +120,8 @@ if "user" in st.session_state:
                 "language": "English"
             })
             }
+
+        # st.write(payload)
         with st.spinner("S.A.P is thinking..."):
             response = requests.post(prod_n8n_webhook_url, json=payload)
 
