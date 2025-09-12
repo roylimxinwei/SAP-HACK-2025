@@ -2,6 +2,7 @@ import streamlit as st
 from supabase import create_client
 import os
 from dotenv import load_dotenv
+import time
 
 # Load environment variables
 load_dotenv()
@@ -27,39 +28,69 @@ if "user_details" not in st.session_state:
         .execute()
     )
 
-    profile_data = result.data if result.data else {}  # Access .data for the actual dict
-    st.session_state.user_details = {
-        "name": profile_data.get("name", ""),
-        "job_title": profile_data.get("job_title", ""),
-        "team": profile_data.get("team", "")
-    }
+    if result is None: # create an emppty row in supabase
+        st.info(f"Hey {user_email}, personalise your profile!", icon="👋")
+         # --- User details form ---
+        with st.form("create_profile_form"):
+            st.subheader("Create Your Profile")
 
-details = st.session_state.user_details
+            name = st.text_input("Preferred Name", value="")
+            job_title = st.text_input("Job Title / Designation", value="")
+            team = st.text_input("Team", value="")
 
-# --- User details form ---
-with st.form("user_details_form"):
-    st.subheader("Update Your Profile")
+            submitted = st.form_submit_button("Confirm Details")
 
-    name = st.text_input("Preferred Name", value=details.get("name", ""))
-    job_title = st.text_input("Job Title / Designation", value=details.get("job_title", ""))
-    team = st.text_input("Team", value=details.get("team", ""))
+            if submitted:
+                # Upsert user details in Supabase
+                supabase.table("user_profiles").upsert({
+                    "email": user_email,
+                    "name": name,
+                    "job_title": job_title,
+                    "team": team
+                }).execute()
 
-    submitted = st.form_submit_button("Save Details")
+                # ✅ Set session_state right away
+                st.session_state.user_details = {
+                    "name": name,
+                    "job_title": job_title,
+                    "team": team,
+                }
 
-    if submitted:
-        # Upsert user details in Supabase
-        supabase.table("user_profiles").upsert({
-            "email": user_email,
-            "name": name,
-            "job_title": job_title,
-            "team": team
-        }).execute()
+                st.success("✅ Profile created successfully!")
+                time.sleep(2)
+                st.rerun()
+    else:
+        profile_data = result.data if result.data else {}  # Access .data for the actual dict
+        st.session_state.user_details = {
+            "name": profile_data.get("name", ""),
+            "job_title": profile_data.get("job_title", ""),
+            "team": profile_data.get("team", "")
+        }
 
-        # Update session_state cache
-        st.session_state.user_details.update({
-            "name": name,
-            "job_title": job_title,
-            "team": team,
-        })
+if "user_details" in st.session_state:
+    details = st.session_state.user_details
 
-        st.success("✅ Profile updated successfully!")
+        # --- User details form ---
+    with st.form("user_details_form"):
+        st.subheader("Update Your Profile")
+        name = st.text_input("Preferred Name", value=details.get("name", ""))
+        job_title = st.text_input("Job Title / Designation", value=details.get("job_title", ""))
+        team = st.text_input("Team", value=details.get("team", ""))
+        submitted = st.form_submit_button("Update Details")
+        if submitted:
+            # Upsert user details in Supabase
+            supabase.table("user_profiles").upsert({
+                "email": user_email,
+                "name": name,
+                "job_title": job_title,
+                "team": team
+            }).execute()
+            # Update session_state cache
+            st.session_state.user_details.update({
+                "name": name,
+                "job_title": job_title,
+                "team": team,
+            })
+            st.success("✅ Profile updated successfully!")
+            time.sleep(2)
+            st.rerun()
