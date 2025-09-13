@@ -6,13 +6,13 @@ import requests, uuid
 
 load_dotenv()
 
-supabase_url = os.getenv("SUPABASE_URL")
-supabase_key = os.getenv("SUPABASE_KEY")
+supabase_url = st.secrets["SUPABASE_URL"]
+supabase_key = st.secrets["SUPABASE_KEY"]
 
 supabase = create_client(supabase_url, supabase_key)
 
-test_n8n_webhook_url = os.getenv("TEST_N8N_WEBHOOK_URL")
-prod_n8n_webhook_url = os.getenv("PROD_N8N_WEBHOOK_URL")
+test_n8n_webhook_url = st.secrets["TEST_N8N_WEBHOOK_URL"]
+prod_n8n_webhook_url = st.secrets["PROD_N8N_WEBHOOK_URL"]
 
 # --- Sign up function ---
 def signup(email, password):

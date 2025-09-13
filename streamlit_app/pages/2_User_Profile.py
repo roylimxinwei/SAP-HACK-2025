@@ -6,7 +6,9 @@ import time
 
 # Load environment variables
 load_dotenv()
-supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
+supabase_url = st.secrets["SUPABASE_URL"]
+supabase_key = st.secrets["SUPABASE_KEY"]
+supabase = create_client(supabase_url, supabase_key)
 
 st.set_page_config(page_title="📝 User Details")
 st.title("📝 User Details / Personalization")
