@@ -10,12 +10,12 @@ supabase_key = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(supabase_url, supabase_key)
 
-st.set_page_config(page_title="Todo List", layout="wide")
+st.set_page_config(page_title="Taskboard", layout="wide")
 
-st.title("📝 Todo List")
+st.title("📝 Taskboard")
 
 if "user" not in st.session_state:
-    st.warning("Please log in to access the Todo List.")
+    st.warning("Please log in to access the Taskboard.")
     st.stop()
 
 # Identify the user to display user-specific tasks

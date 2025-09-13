@@ -26,6 +26,25 @@ def login(email, password):
 def logout():
     supabase.auth.sign_out()
 
+    st.markdown(
+    """
+    <style>
+    [data-testid="stSidebarNav"]::before {
+        content: "🥤 Ice Blended Frappe";
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 20px;
+        font-weight: 700;
+        position: relative;
+        top: 10px;
+        display: block;
+        padding-bottom: 10px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("🤖 Smart Agent Playground (S.A.P)")
 st.set_page_config(page_title="(S.A.P) Home")
 
