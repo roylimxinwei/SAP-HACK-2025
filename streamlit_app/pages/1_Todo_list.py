@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from supabase import create_client
+from datetime import datetime
 
 supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
@@ -45,8 +46,11 @@ else:
             for task in tasks:
                 st.subheader(task['task'])
                 st.write(f"**Description**: {task['description']}")
-                st.write(f"**Deadline**: {task['deadline']}")
-                st.write(f"**Assigned To**: {task['recipient']}")
+                deadline_str = task["deadline"]
+                deadline_dt = datetime.fromisoformat(deadline_str.replace("Z", "+00:00"))
+                formatted_deadline = deadline_dt.strftime("%d/%m/%Y")
+                st.write(f"**Deadline**: {formatted_deadline}")
+                # st.write(f"**Assigned To**: {task['recipient']}")
                 st.write(f"**Assigned By**: {task['sender']}")
                 st.markdown("---")
 
