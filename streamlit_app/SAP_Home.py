@@ -110,8 +110,6 @@ if "user" in st.session_state:
         # with st.chat_message("assistant"):
         #     st.markdown(response)
 
-
-        #TODO: might need to make user personalisation first
         result = (
             supabase.table("user_profiles")
             .select("*")
@@ -120,20 +118,26 @@ if "user" in st.session_state:
             .execute()
         )
 
-        profile_data = result.data or {}
+        if result is None:
+            user_details = {}
 
-        user_details = {
-            "email": profile_data.get("email"),
-            "name": profile_data.get("name"),
-            "job_title": profile_data.get("job_title"),
-            "team": profile_data.get("team")
-        }
+        else:
+            profile_data = result.data or {}
+
+            user_details = {
+                "email": profile_data.get("email"),
+                "name": profile_data.get("name"),
+                "job_title": profile_data.get("job_title"),
+                "team": profile_data.get("team")
+            }
 
         payload = {
             "sessionId": st.session_state.session_id,
             "chatInput": prompt,
             "user_details": user_details
         }
+
+        #print("Payload to n8n:", payload)
 
         # st.write(payload)
         with st.spinner("S.A.P is thinking..."):
