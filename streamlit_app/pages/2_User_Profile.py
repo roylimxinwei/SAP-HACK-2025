@@ -63,6 +63,7 @@ if "user_details" not in st.session_state:
         profile_data = result.data if result.data else {}  # Access .data for the actual dict
         st.session_state.user_details = {
             "name": profile_data.get("name", ""),
+            "email": user_email,
             "job_title": profile_data.get("job_title", ""),
             "team": profile_data.get("team", "")
         }

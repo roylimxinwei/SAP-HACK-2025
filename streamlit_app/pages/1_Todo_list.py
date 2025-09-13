@@ -17,9 +17,14 @@ if "user" not in st.session_state:
 
 # Identify the user to display user-specific tasks
 user_email = st.session_state["user"].email
-
+name = st.session_state.get("user_details", {}).get("name", "")
 # Fetch tasks from Supabase table where recipient is the logged-in user
-tasks = supabase.table("tasks").select("*").eq("recipient", user_email).execute()
+tasks = (
+    supabase.table("tasks")
+    .select("*")
+    .or_(f"recipient.ilike.{user_email},recipient.ilike.{name}")
+    .execute()
+)
 
 # If no tasks are found, show a message
 if len(tasks.data) == 0:
