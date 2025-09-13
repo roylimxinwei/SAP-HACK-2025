@@ -3,6 +3,7 @@ from supabase import create_client
 import os
 from dotenv import load_dotenv
 import requests, uuid
+import time
 
 load_dotenv()
 
@@ -190,7 +191,13 @@ if "user" in st.session_state:
 
             # Show assistant reply in a bubble
             with st.chat_message("assistant"):
-                st.markdown(bot_reply)
+                placeholder = st.empty()
+                collected_text = ""
+
+                for char in bot_reply:  # stream character by character
+                    collected_text += char
+                    placeholder.markdown(collected_text)
+                    time.sleep(0.01)  # adjust speed
 
         else:
             st.error(f"Error: {response.status_code} {response.text}")
