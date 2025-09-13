@@ -63,8 +63,8 @@ if "messages" not in st.session_state:
 
 # --- Show logged-in state ---
 if "user" in st.session_state:
-    st.write("Welcome back", st.session_state["user"].email)
     with st.sidebar:
+        st.write("Logged in as:", st.session_state["user"].email)
         if st.button("Logout"):
             logout()
             st.session_state.pop("user")
@@ -110,15 +110,30 @@ if "user" in st.session_state:
         # with st.chat_message("assistant"):
         #     st.markdown(response)
 
+
+        #TODO: might need to make user personalisation first
+        result = (
+            supabase.table("user_profiles")
+            .select("*")
+            .eq("email", st.session_state["user"].email)
+            .maybe_single()
+            .execute()
+        )
+
+        profile_data = result.data or {}
+
+        user_details = {
+            "email": profile_data.get("email"),
+            "name": profile_data.get("name"),
+            "job_title": profile_data.get("job_title"),
+            "team": profile_data.get("team")
+        }
+
         payload = {
             "sessionId": st.session_state.session_id,
             "chatInput": prompt,
-            "user_details": st.session_state.get("user_details", {
-                "name": "",
-                "job_title": "",
-                "team": ""
-            })
-            }
+            "user_details": user_details
+        }
 
         # st.write(payload)
         with st.spinner("S.A.P is thinking..."):
