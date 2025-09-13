@@ -26,6 +26,10 @@ def login(email, password):
 # --- Logout function ---
 def logout():
     supabase.auth.sign_out()
+    for key in ["user", "user_details", "session_id"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.rerun()
 
     st.markdown(
     """
