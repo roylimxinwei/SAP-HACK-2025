@@ -2,6 +2,7 @@ import streamlit as st
 import os
 from supabase import create_client
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
@@ -46,9 +47,17 @@ else:
             for task in tasks:
                 st.subheader(task['task'])
                 st.write(f"**Description**: {task['description']}")
-                deadline_str = task["deadline"]
-                deadline_dt = datetime.fromisoformat(deadline_str.replace("Z", "+00:00"))
-                formatted_deadline = deadline_dt.strftime("%d/%m/%Y")
+                if task.get("deadline"):
+                    deadline_str = task["deadline"]
+                    deadline_dt = datetime.fromisoformat(deadline_str.replace("Z", "+00:00"))
+                    # convert to Singapore timezone
+                    sg_timezone = ZoneInfo("Asia/Singapore")
+                    deadline_dt_sg = deadline_dt.astimezone(sg_timezone)
+                    
+                    # format nicely
+                    formatted_deadline = deadline_dt_sg.strftime("%d/%m/%Y %H:%M")
+                else:
+                    formatted_deadline = "No deadline set"
                 st.write(f"**Deadline**: {formatted_deadline}")
                 # st.write(f"**Assigned To**: {task['recipient']}")
                 st.write(f"**Assigned By**: {task['sender']}")
