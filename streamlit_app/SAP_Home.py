@@ -32,7 +32,7 @@ def logout():
             del st.session_state[key]
     st.rerun()
 
-    st.markdown(
+st.markdown(
     """
     <style>
     [data-testid="stSidebarNav"]::before {
