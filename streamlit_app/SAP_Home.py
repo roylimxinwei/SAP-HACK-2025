@@ -85,6 +85,13 @@ if "user" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+with st.sidebar:
+    st.sidebar.title("SAP Home")
+    st.sidebar.write("All in one chat consisting:")
+    st.sidebar.write("1. Onboarding Buddy -- Helps new hires get acquainted with company policies, culture, and resources.")
+    st.sidebar.write("2. L&D Coach -- Provides personalized learning and development recommendations.")
+    st.sidebar.write("3. Productivity Copilot -- Assists with task management and productivity tracking.")
+
 # --- Show logged-in state ---
 if "user" in st.session_state:
     with st.sidebar:
