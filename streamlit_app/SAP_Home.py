@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import requests, uuid
 import time
+import random
 
 load_dotenv()
 
@@ -129,7 +130,7 @@ if "user" in st.session_state:
         st.session_state.session_id = str(uuid.uuid4())  # Still can keep it for session-specific tracking if needed
 
     # Chat input box
-    if prompt := st.chat_input("Say something..."):
+    if prompt := st.chat_input(placeholder=st.session_state.get("chat_placeholder", "Type your message...")):
         # Add user message
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
@@ -212,4 +213,5 @@ if "user" in st.session_state:
 
         else:
             st.error(f"Error: {response.status_code} {response.text}")
+        st.session_state.chat_placeholder = random.choice(["How can I onboard?", "Do I have any tasks to do?", "Recommend me some courses and add it to my taskboard!", "Assign a project review to Kieron, to be completed by Friday 2pm."])
 
